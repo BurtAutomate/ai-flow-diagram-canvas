@@ -10,6 +10,11 @@ const electronAPI = {
     maximize: () => ipcRenderer.invoke('window:maximize'),
     close: () => ipcRenderer.invoke('window:close'),
   },
+  fs: {
+    listDir: (path: string) => ipcRenderer.invoke('fs:listDir', { path }),
+    readFile: (path: string) => ipcRenderer.invoke('fs:readFile', { path }),
+    getFileInfo: (path: string) => ipcRenderer.invoke('fs:getFileInfo', { path }),
+  },
   on: (channel: string, callback: (...args: unknown[]) => void) => {
     const subscription = (_event: Electron.IpcRendererEvent, ...args: unknown[]) =>
       callback(...args)
