@@ -14,11 +14,12 @@ export function useFileBrowser() {
 
   const initRoot = useCallback(async () => {
     if (rootPath) return
-    // Default to process.cwd() equivalent — Electron's app.getPath('home') or cwd
-    const cwd = process.cwd()
-    setRootPath(cwd)
     setLoading(true)
     try {
+      // Get the project root directory from the main process via IPC
+      // (process.cwd() in the renderer returns the wrong path with contextIsolation)
+      const cwd = await electronAPI.app.getCwd()
+      setRootPath(cwd)
       const entries = await electronAPI.fs.listDir(cwd)
       setTree(entries)
     } catch {
