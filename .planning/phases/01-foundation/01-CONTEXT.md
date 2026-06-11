@@ -75,7 +75,7 @@ All requirements captured in decisions above — no external SPEC.md or ADR file
 <specifics>
 ## Specific Ideas
 - Obsidianite theme to reference for dark palette inspiration: `~/code/CUSTOM_AI_Coding_Agent/01_Intro/Obsidianite` (local reference only — use as visual inspiration, not direct import)
-- Project renamed from "AI Agent Studio" to **AI CLI Studio** with package name `ai-cli-studio`
+- Project named **AI CLI Studio** with package name `ai-cli-studio`
 
 </specifics>
 

@@ -37,7 +37,7 @@
 
 | Option | Description | Selected |
 |--------|-------------|----------|
-| ai-agent-studio | npm-style name | |
+| ai-cli-studio | npm-style name | |
 | com.aistudio.app | Reverse-domain appId | |
 
 **User's choice:** Renamed project to **AI CLI Studio** — package name `ai-cli-studio`

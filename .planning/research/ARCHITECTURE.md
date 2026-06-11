@@ -8,7 +8,7 @@
 
 ### System Overview
 
-The AI Agent Studio follows a **four-process Electron architecture** with a strict main/preload/renderer/utility split. The key structural insight is that long-running services (WebSocket server, MCP server) must NOT run in the main process — they belong in utility processes to keep the main process responsive for window lifecycle and IPC routing.
+The AI CLI Studio follows a **four-process Electron architecture** with a strict main/preload/renderer/utility split. The key structural insight is that long-running services (WebSocket server, MCP server) must NOT run in the main process — they belong in utility processes to keep the main process responsive for window lifecycle and IPC routing.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -90,7 +90,7 @@ The AI Agent Studio follows a **four-process Electron architecture** with a stri
 ## Recommended Project Structure
 
 ```
-ai-agent-studio/
+ai-cli-studio/
 ├── src/
 │   ├── main/                          # Electron main process
 │   │   ├── index.ts                   # App entry, window creation
@@ -692,5 +692,5 @@ The component boundaries above dictate a dependency-based build order:
 
 ---
 
-*Architecture research for: AI Agent Studio — Electron-based Canvas / Artifact Viewer for AI CLI Agents*
+*Architecture research for: AI CLI Studio — Electron-based Canvas / Artifact Viewer for AI CLI Agents*
 *Researched: 2026-06-11*

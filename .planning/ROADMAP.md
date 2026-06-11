@@ -7,9 +7,10 @@ AI CLI Studio bridges the gap between "AI CLI agent generates an artifact" and "
 ## Phases
 
 - [x] **Phase 1: Foundation** — Electron scaffold, secure IPC, dark theme, lazy-loading infrastructure
-- [x] **Phase 2: Core Artifact Viewing** — Tabbed preview-first UI with code/markdown/image renderers and file browser (completed 2026-06-11)
+- [x] **Phase 2: Core Artifact Viewing** — Tabbed preview-first UI with code/markdown/image renderers and file browser (completed 2026-06-11, gap closure in progress)
 - [ ] **Phase 3: Agent Communication** — WebSocket protocol, dual-mode connectivity, and MCP server
 - [ ] **Phase 4: Advanced Artifacts** — HTML sandbox, SVG interactive, PDF viewer, Mermaid diagrams
+- [ ] **Phase 5: UI Polish & Shiki** — Visual redesign of all components, fix Shiki syntax highlighting integration
 
 ## Phase Details
 
@@ -88,13 +89,31 @@ Plans:
 **Research flags**: CSP configuration in Electron differs from browsers in some edge cases — needs prototyping. PDF.js worker configuration and memory behavior across multiple tabs needs heap snapshot verification.
 **UI hint**: yes
 
+### Phase 5: UI Polish & Shiki
+
+**Goal**: Visual design is polished and Shiki syntax highlighting works correctly in the Electron renderer
+**Mode**: mvp
+**Depends on**: Phase 2
+**Requirements**: RND-01, RND-08 (UI quality)
+**Success Criteria** (what must be TRUE):
+
+  1. CodeViewer shows syntax-highlighted code with a coherent dark theme (Shiki working in Electron renderer)
+  2. All components (TabBar, FileBrowser, ViewModeControls, WelcomeScreen, Viewers) follow a consistent visual language — proper hierarchy, spacing, color usage, and typography
+  3. Sidebar, tab bar, viewer panel, and overflow surfaces have a unified, professional aesthetic
+  4. No dead or vestigial UI code; visual interactions are intentional and clean
+
+**Plans**: TBD
+**Research flags**: Shiki v4 engine configuration in Electron renderer — needs spike to determine if WASM/JS engine is required, and how to handle async highlighter creation in lazy-loaded component.
+**UI hint**: yes
+
 ## Progress
 
-**Execution Order:** Phases execute sequentially: 1 → 2 → 3 → 4
+**Execution Order:** Phases execute sequentially: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | ✓ Complete | 2026-06-11 |
-| 2. Core Artifact Viewing | 2/2 | Complete   | 2026-06-11 |
+| 2. Core Artifact Viewing | 3/3 | Complete (gap closure) | 2026-06-11 |
 | 3. Agent Communication | 0/TBD | Not started | - |
 | 4. Advanced Artifacts | 0/TBD | Not started | - |
+| 5. UI Polish & Shiki | 0/TBD | Not started | - |

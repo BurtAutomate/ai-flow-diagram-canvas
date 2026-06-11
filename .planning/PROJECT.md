@@ -1,4 +1,4 @@
-# AI Agent Studio
+# AI CLI Studio
 
 ## What This Is
 

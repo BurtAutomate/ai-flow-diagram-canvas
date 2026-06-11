@@ -1,13 +1,13 @@
 # Project Research Summary
 
-**Project:** AI Agent Studio
+**Project:** AI CLI Studio
 **Domain:** Electron-based Canvas / Artifact Viewer for AI CLI Agents
 **Researched:** 2026-06-11
 **Confidence:** HIGH
 
 ## Executive Summary
 
-AI Agent Studio is a native desktop artifact viewer designed for CLI coding agents (Claude Code, Codex, OpenCode, Cline, etc.) — a niche no existing product adequately serves. ChatGPT Canvas, Claude Artifacts, and Gemini Canvas are all embedded in chat UIs; the Codex App focuses on task management rather than viewing. This product fills a gap: a lightweight, preview-first desktop canvas that agents control programmatically via WebSocket and MCP, with a self-contained mode (Electron runs the server) and an agent-connected mode (Electron connects to the agent's server).
+AI CLI Studio is a native desktop artifact viewer designed for CLI coding agents (Claude Code, Codex, OpenCode, Cline, etc.) — a niche no existing product adequately serves. ChatGPT Canvas, Claude Artifacts, and Gemini Canvas are all embedded in chat UIs; the Codex App focuses on task management rather than viewing. This product fills a gap: a lightweight, preview-first desktop canvas that agents control programmatically via WebSocket and MCP, with a self-contained mode (Electron runs the server) and an agent-connected mode (Electron connects to the agent's server).
 
 **The recommended approach** is a four-process Electron architecture (main/preload/renderer/utility) with strict process isolation. WebSocket and MCP servers run as separate `utilityProcess` instances — never in the main process. The renderer is fully sandboxed (`contextIsolation: true`, `sandbox: true`), with all system interaction routed through typed, Zod-validated IPC via `contextBridge`. Artifact viewers use a registry pattern for extensibility. The stack prioritizes lightweight, purpose-built libraries: `react-shiki` over Monaco/CodeMirror for display-only highlighting, `react-markdown` over `marked` for XSS-safe markdown, and raw `ws` over Socket.IO since both endpoints live in-process.
 
