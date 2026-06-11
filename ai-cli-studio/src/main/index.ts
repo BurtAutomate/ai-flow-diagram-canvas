@@ -1,23 +1,46 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { registerAllIPC } from './ipc'
+
+const START_TIME = performance.now()
 
 function createWindow(): void {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1200,
+    height: 800,
+    minWidth: 800,
+    minHeight: 600,
     show: false,
     autoHideMenuBar: true,
+    title: 'AI CLI Studio',
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
-    }
+      contextIsolation: true,
+      sandbox: true,
+      nodeIntegration: false,
+    },
   })
 
   mainWindow.on('ready-to-show', () => {
+    const elapsed = performance.now() - START_TIME
+    console.log(`[PERF] ready-to-show: ${elapsed.toFixed(1)}ms`)
+
+    // Log memory baseline
+    const mem = process.memoryUsage()
+    console.log(`[PERF] RSS: ${(mem.rss / 1024 / 1024).toFixed(1)}MB`)
+    console.log(`[PERF] Heap: ${(mem.heapUsed / 1024 / 1024).toFixed(1)}MB`)
+
+    // Assert performance budget
+    if (elapsed > 2000) {
+      console.warn(`[PERF] ⚠️ Startup exceeds 2s budget: ${elapsed.toFixed(1)}ms`)
+    }
+    if (mem.rss > 200 * 1024 * 1024) {
+      console.warn(`[PERF] ⚠️ Idle RSS exceeds 200MB: ${(mem.rss / 1024 / 1024).toFixed(1)}MB`)
+    }
+
     mainWindow.show()
   })
 
@@ -49,8 +72,8 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
+  // Register all IPC handlers before creating window
+  registerAllIPC()
 
   createWindow()
 
@@ -69,6 +92,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
