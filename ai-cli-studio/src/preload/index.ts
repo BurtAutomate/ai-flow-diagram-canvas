@@ -4,6 +4,7 @@ const electronAPI = {
   app: {
     quit: (force?: boolean) => ipcRenderer.invoke('app:quit', { force }),
     getVersion: () => ipcRenderer.invoke('app:getVersion'),
+    getCwd: () => ipcRenderer.invoke('app:getCwd'),
   },
   window: {
     minimize: () => ipcRenderer.invoke('window:minimize'),

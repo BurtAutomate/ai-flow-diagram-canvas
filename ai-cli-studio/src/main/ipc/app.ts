@@ -1,4 +1,5 @@
 import { ipcMain, app } from 'electron'
+import process from 'node:process'
 import { AppQuitSchema } from '../../shared/validators/app'
 import { IPC_CHANNELS } from '../../shared/types/ipc'
 
@@ -22,5 +23,9 @@ export function registerAppIPC(): void {
 
   ipcMain.handle(IPC_CHANNELS.APP_GET_VERSION, async () => {
     return app.getVersion()
+  })
+
+  ipcMain.handle(IPC_CHANNELS.APP_GET_CWD, async () => {
+    return process.cwd()
   })
 }

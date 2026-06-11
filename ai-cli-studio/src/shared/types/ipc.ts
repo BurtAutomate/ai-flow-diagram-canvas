@@ -1,5 +1,6 @@
 export const IPC_CHANNELS = {
   APP_QUIT: 'app:quit',
+  APP_GET_CWD: 'app:getCwd',
   APP_GET_VERSION: 'app:getVersion',
   WINDOW_MINIMIZE: 'window:minimize',
   WINDOW_MAXIMIZE: 'window:maximize',

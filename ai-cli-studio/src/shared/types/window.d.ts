@@ -2,6 +2,7 @@ export interface ElectronAPI {
   app: {
     quit: (force?: boolean) => Promise<void>
     getVersion: () => Promise<string>
+    getCwd: () => Promise<string>
   }
   window: {
     minimize: () => Promise<void>
