@@ -2,7 +2,7 @@ import { type FC, useRef } from 'react'
 import { useArtifactTabsStore } from '../stores/artifactTabs'
 import { useUiStateStore } from '../stores/uiState'
 import { ResizeHandle } from './ResizeHandle'
-import { CodeSkeleton, MarkdownSkeleton } from './ui/Skeleton'
+import { viewerRegistry } from '../../components/viewers/ViewerRegistry'
 
 const ArtifactIndex: FC = () => (
   <div className="flex flex-col items-center justify-center h-full text-text-faint">
@@ -13,11 +13,6 @@ const ArtifactIndex: FC = () => (
     <p className="text-sm text-text-faint">Browse files to open an artifact, or connect an agent</p>
   </div>
 )
-
-const SkeletonByType: FC<{ type: string }> = ({ type }) => {
-  if (type === 'markdown') return <MarkdownSkeleton />
-  return <CodeSkeleton />
-}
 
 export const ViewerPanel: FC = () => {
   const tabs = useArtifactTabsStore((s) => s.tabs)
@@ -37,25 +32,37 @@ export const ViewerPanel: FC = () => {
   }
 
   const renderPreview = () => {
-    if (activeTab.isLoading || !activeTab.content) {
-      return <SkeletonByType type={activeTab.type} />
+    if (activeTab.isLoading) {
+      const def = viewerRegistry.getViewer(activeTab.type)
+      if (def?.skeleton) {
+        const SkeletonComponent = def.skeleton
+        return <SkeletonComponent content="" title={activeTab.title} />
+      }
     }
-    return (
-      <div className="flex items-center justify-center h-full text-text-faint text-sm">
-        Preview for {activeTab.type} — viewer coming in Plan 02
-      </div>
-    )
+    if (activeTab.content) {
+      return viewerRegistry.render(activeTab.type, {
+        content: activeTab.content,
+        title: activeTab.title,
+      })
+    }
+    return null
   }
 
   const renderCode = () => {
     if (activeTab.isLoading || !activeTab.content) {
-      return <SkeletonByType type={activeTab.type} />
+      const def = viewerRegistry.getViewer(activeTab.type)
+      if (def?.skeleton) {
+        const SkeletonComponent = def.skeleton
+        return <SkeletonComponent content="" title={activeTab.title} />
+      }
     }
-    return (
-      <pre className="h-full overflow-auto p-4 bg-code-bg text-code-text font-mono text-sm">
-        <code>{activeTab.content}</code>
-      </pre>
-    )
+    if (activeTab.content) {
+      return viewerRegistry.render('code', {
+        content: activeTab.content,
+        title: activeTab.title,
+      })
+    }
+    return null
   }
 
   if (viewMode === 'preview') {

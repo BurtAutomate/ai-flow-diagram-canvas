@@ -1,19 +1,22 @@
-import { type FC } from 'react'
+import { type FC, useEffect } from 'react'
 import { TabBar } from './TabBar'
 import { ViewModeControls } from './ViewModeControls'
 import { ViewerPanel } from './ViewerPanel'
+import { FileBrowser } from './FileBrowser'
+import { useFileBrowser } from '../hooks/useFileBrowser'
 
 export const Layout: FC = () => {
+  const { initRoot } = useFileBrowser()
+
+  useEffect(() => {
+    initRoot()
+  }, [initRoot])
+
   return (
     <div className="flex h-screen w-screen bg-bg-primary overflow-hidden">
-      {/* Sidebar — file browser placeholder (Plan 02) */}
+      {/* Sidebar — file browser */}
       <div className="w-56 shrink-0 bg-bg-tertiary border-r border-border-default flex flex-col">
-        <div className="p-3 text-xs text-text-faint font-medium border-b border-border-default">
-          Files
-        </div>
-        <div className="flex-1 flex items-center justify-center text-text-faint text-xs">
-          File browser — Plan 02
-        </div>
+        <FileBrowser />
       </div>
 
       {/* Main content area */}
