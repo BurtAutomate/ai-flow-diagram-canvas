@@ -1,7 +1,7 @@
-import { WelcomeScreen } from './components/WelcomeScreen'
+import { Layout } from './components/Layout'
 
 function App(): React.JSX.Element {
-  return <WelcomeScreen />
+  return <Layout />
 }
 
 export default App
