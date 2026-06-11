@@ -6,7 +6,7 @@ import {
   createElement,
   Suspense,
 } from 'react'
-import { CodeSkeleton } from '../../src/components/ui/Skeleton'
+import { CodeSkeleton, MarkdownSkeleton } from '../../src/components/ui/Skeleton'
 
 export type ArtifactType = 'code' | 'markdown' | 'html' | 'image' | 'pdf' | 'svg'
 
@@ -56,5 +56,17 @@ export const viewerRegistry = new ViewerRegistry()
 viewerRegistry.register({
   type: 'code',
   component: lazy(() => import('../../src/components/viewers/CodeViewer')),
+  skeleton: CodeSkeleton,
+})
+
+viewerRegistry.register({
+  type: 'markdown',
+  component: lazy(() => import('../../src/components/viewers/MarkdownViewer')),
+  skeleton: MarkdownSkeleton,
+})
+
+viewerRegistry.register({
+  type: 'image',
+  component: lazy(() => import('../../src/components/viewers/ImageViewer')),
   skeleton: CodeSkeleton,
 })
