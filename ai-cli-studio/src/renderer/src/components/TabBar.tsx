@@ -1,5 +1,5 @@
-import { type FC, useRef, useState, useCallback } from 'react'
-import { X, ChevronDown } from 'lucide-react'
+import { type FC, useRef, useCallback } from 'react'
+import { X } from 'lucide-react'
 import {
   DndContext,
   closestCenter,
@@ -76,8 +76,6 @@ export const TabBar: FC = () => {
   const setActiveTab = useArtifactTabsStore((s) => s.setActiveTab)
   const closeTab = useArtifactTabsStore((s) => s.closeTab)
   const reorderTabs = useArtifactTabsStore((s) => s.reorderTabs)
-  const [showOverflow, setShowOverflow] = useState(false)
-  const overflowRef = useRef<HTMLDivElement>(null)
   const barRef = useRef<HTMLDivElement>(null)
 
   const sensors = useSensors(
@@ -97,21 +95,18 @@ export const TabBar: FC = () => {
     [tabs, reorderTabs]
   )
 
-  const visibleTabs = tabs
-  const overflowTabs = tabs.length > 5 ? tabs.slice(5) : []
-
   return (
     <div
       ref={barRef}
-      className="flex items-center h-9 bg-bg-secondary border-b border-border-default overflow-hidden"
+      className="flex items-center h-9 bg-bg-secondary border-b border-border-default overflow-x-auto overflow-y-hidden flex-1 min-w-0"
     >
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext
-          items={visibleTabs.map((t) => t.id)}
+          items={tabs.map((t) => t.id)}
           strategy={horizontalListSortingStrategy}
         >
-          <div className="flex-1 flex overflow-hidden">
-            {visibleTabs.slice(0, 5).map((tab) => (
+          <div className="flex overflow-hidden">
+            {tabs.map((tab) => (
               <SortableTab
                 key={tab.id}
                 id={tab.id}
@@ -121,33 +116,6 @@ export const TabBar: FC = () => {
                 onClose={() => closeTab(tab.id)}
               />
             ))}
-            {overflowTabs.length > 0 && (
-              <div ref={overflowRef} className="relative">
-                <button
-                  onClick={() => setShowOverflow(!showOverflow)}
-                  className="flex items-center px-2 h-full text-text-secondary hover:text-text-primary transition-colors"
-                  aria-label="More tabs"
-                >
-                  <ChevronDown size={14} />
-                </button>
-                {showOverflow && (
-                  <div className="absolute top-full right-0 mt-1 bg-bg-secondary border border-border-default rounded-md shadow-lg z-50 min-w-32">
-                    {overflowTabs.map((tab) => (
-                      <button
-                        key={tab.id}
-                        onClick={() => {
-                          setActiveTab(tab.id)
-                          setShowOverflow(false)
-                        }}
-                        className="block w-full text-left px-3 py-1.5 text-xs text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors"
-                      >
-                        {tab.title}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         </SortableContext>
       </DndContext>

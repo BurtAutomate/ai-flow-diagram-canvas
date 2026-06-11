@@ -1,58 +1,75 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
-/* Obsidianite-inspired dark palette (per D-08 — adapted for code-viewing readability) */
-/* Values from UI-SPEC.md color section — exact hex codes */
+/* Polished dark palette — refined for visual hierarchy and code-readability */
 @theme {
-  --color-bg-primary: #100e17;
-  --color-bg-secondary: #191621;
-  --color-bg-tertiary: #0d0b12;
-  --color-bg-elevated: #1e1a2e;
+  /* Backgrounds — layered depth */
+  --color-bg-primary: #0f1117;
+  --color-bg-secondary: #161922;
+  --color-bg-tertiary: #0b0d13;
+  --color-bg-elevated: #1c2030;
 
-  --color-text-primary: #bebebe;
-  --color-text-secondary: #8a8a8a;
-  --color-text-faint: #7aa2f7;
-  --color-text-accent: #0fb6d6;
+  /* Text — proper dim→bright hierarchy */
+  --color-text-primary: #e4e6eb;
+  --color-text-secondary: #9ca0ad;
+  --color-text-faint: #5b6070;
+  --color-text-accent: #7aa2f7;
 
-  --color-accent-primary: #0fb6d6;
-  --color-accent-hover: #13cef0;
-  --color-accent-muted: rgba(14, 210, 247, 0.5);
+  /* Accent — calm cyan, not aggressive */
+  --color-accent-primary: #7aa2f7;
+  --color-accent-hover: #9ab8ff;
+  --color-accent-muted: rgba(122, 162, 247, 0.18);
+  --color-accent-glow: rgba(122, 162, 247, 0.35);
 
-  --color-status-success: #17b978;
-  --color-status-warning: #ffc93c;
-  --color-status-error: #f95959;
+  /* Status — Tokyo Night-inspired */
+  --color-status-success: #9ece6a;
+  --color-status-warning: #e0af68;
+  --color-status-error: #f7768e;
 
-  --color-border-default: rgba(14, 210, 247, 0.15);
-  --color-border-accent: rgba(14, 210, 247, 0.3);
+  /* Borders — subtle, not garish */
+  --color-border-default: rgba(255, 255, 255, 0.06);
+  --color-border-strong: rgba(255, 255, 255, 0.12);
+  --color-border-accent: rgba(122, 162, 247, 0.4);
 
-  --color-code-bg: #191621;
-  --color-code-text: #0fb6d6;
+  /* Code — distinct from UI text */
+  --color-code-bg: #0d1117;
+  --color-code-text: #c0caf5;
 
-  /* Typography scale from UI-SPEC */
-  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Typography */
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-family: var(--font-family-sans);
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
   overflow: hidden;
+  letter-spacing: -0.005em;
 }
 
-/* Scrollbar styling */
+/* Scrollbar — slim, refined */
 ::-webkit-scrollbar {
-  width: 0.6rem;
+  width: 0.5rem;
+  height: 0.5rem;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-border-default);
+  background-color: var(--color-border-strong);
   border-radius: 999px;
 }
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-faint);
+}
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-secondary);
+  background: transparent;
 }
 
-/* Shimmer animation for skeleton screens (per D-11) */
+/* Shimmer animation for skeleton screens */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -61,11 +78,25 @@ body {
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--color-bg-secondary) 25%,
+    var(--color-bg-secondary) 0%,
     var(--color-bg-elevated) 50%,
-    var(--color-bg-secondary) 75%
+    var(--color-bg-secondary) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s ease-in-out infinite;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle focus ring for keyboard nav */
+*:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Smooth transitions for interactive elements */
+button, [role="tab"], [role="button"] {
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
 }
