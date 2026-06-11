@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-06-11T00:46:59.598Z"
-last_activity: 2026-06-11 — Roadmap created with 4 phases, 27 requirements mapped
+status: completed
+stopped_at: Phase 1 complete — app scaffolded, IPC wired, dark theme, WelcomeScreen
+last_updated: "2026-06-11T01:33:14.550Z"
+last_activity: 2026-06-11 — Phase 1 complete — app scaffolded, IPC wired, dark theme, WelcomeScreen
 progress:
   total_phases: 4
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  completed_phases: 1
+  total_plans: 2
+  completed_plans: 2
+  percent: 25
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-11)
 
 **Core value:** AI CLI agents must have a visual canvas that just works — open artifacts, preview them, toggle code, browse files — controllable programmatically via API and MCP, cross-platform, and extensible for future tool apps.
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 01 — foundation
 
 ## Current Position
 
-Phase: 1 of 4 (Foundation)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-06-11 — Roadmap created with 4 phases, 27 requirements mapped
+Phase: 01 — COMPLETE
+Plan: 2 of 2
+Status: Phase 01 complete
+Last activity: 2026-06-11 -- Phase 01 marked complete
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██████████] 25%
 
 ## Performance Metrics
 
@@ -63,6 +63,10 @@ Recent decisions affecting current work:
 - [Phase 1]: Four-phase build order — Foundation → Core Viewing → Agent Communication → Advanced Artifacts
 - [All]: Vertical MVP mode — each phase delivers an end-to-end user capability
 - [All]: Standard granularity applied — no phase has a single requirement; folded UI-04 (File Browser) into Phase 2
+- [Phase 1 Plan 01]: Used `@quick-start/create-electron` (not `@quick-start/electron`) — confirmed correct package name from RESEARCH.md
+- [Phase 1 Plan 01]: @tailwindcss/postcss is a separate npm package from tailwindcss v4 — must be installed explicitly
+- [Phase 1 Plan 02]: ViewerRegistry uses .ts (not .tsx) — vitest 4 CJS require() can't parse JSX in .tsx via Module._resolveFilename
+- [Phase 1 Plan 02]: vitest.setup.ts patch needed for Module._resolveFilename — vitest 4 cannot resolve .ts files loaded via CJS require() without extension
 
 ### Pending Todos
 
@@ -82,6 +86,6 @@ Items acknowledged and carried forward:
 
 ## Session Continuity
 
-Last session: 2026-06-11T00:46:59.590Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-foundation/01-CONTEXT.md
+Last session: 2026-06-11T01:09:36.886Z
+Stopped at: Phase 1 complete — app scaffolded, IPC wired, dark theme, WelcomeScreen
+Resume file: .planning/phases/01-foundation/01-02-SUMMARY.md

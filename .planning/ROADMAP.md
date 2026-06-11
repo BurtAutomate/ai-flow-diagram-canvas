@@ -6,7 +6,7 @@ AI Agent Studio bridges the gap between "AI CLI agent generates an artifact" and
 
 ## Phases
 
-- [ ] **Phase 1: Foundation** — Electron scaffold, secure IPC, dark theme, lazy-loading infrastructure
+- [x] **Phase 1: Foundation** — Electron scaffold, secure IPC, dark theme, lazy-loading infrastructure
 - [ ] **Phase 2: Core Artifact Viewing** — Tabbed preview-first UI with code/markdown/image renderers and file browser
 - [ ] **Phase 3: Agent Communication** — WebSocket protocol, dual-mode connectivity, and MCP server
 - [ ] **Phase 4: Advanced Artifacts** — HTML sandbox, SVG interactive, PDF viewer, Mermaid diagrams
@@ -24,9 +24,13 @@ AI Agent Studio bridges the gap between "AI CLI agent generates an artifact" and
   3. IPC communication between renderer and main process works through typed, Zod-validated channels via contextBridge
   4. Artifact renderers are not loaded on startup — lazy-loading infrastructure defers them until needed
   5. App starts in under 2 seconds and stays under 200 MB idle RAM
-**Plans**: TBD
+**Plans**: 2 plans across 2 waves
 **Research flags**: Cross-platform CI configuration (GitHub Actions matrix for Linux/macOS/Windows + AppImage/NSIS/DMG) needs a brief research spike for platform-specific quirks.
 **UI hint**: yes
+
+Plans:
+- [x] 01-01-PLAN.md — Scaffold + build tooling + failing contract tests (Wave 1)
+- [x] 01-02-PLAN.md — IPC stack + dark theme + WelcomeScreen + ViewerRegistry (Wave 2)
 
 ### Phase 2: Core Artifact Viewing
 **Goal**: Users can browse files and view code, markdown, and image artifacts in a preview-first tabbed interface
@@ -77,7 +81,7 @@ AI Agent Studio bridges the gap between "AI CLI agent generates an artifact" and
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
+| 1. Foundation | 2/2 | ✓ Complete | 2026-06-11 |
 | 2. Core Artifact Viewing | 0/TBD | Not started | - |
 | 3. Agent Communication | 0/TBD | Not started | - |
 | 4. Advanced Artifacts | 0/TBD | Not started | - |

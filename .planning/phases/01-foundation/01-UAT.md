@@ -84,8 +84,8 @@ skipped: 0
 ## Gaps
 
 - truth: "WelcomeScreen shows tagline 'Your agent's visual canvas.'"
-  status: failed
-  reason: "User reported: pass but tagline is different than expected"
+  status: accepted
+  reason: "User accepted current tagline — different than UI-SPEC but intentional"
   severity: cosmetic
   test: 2
   root_cause: ""
