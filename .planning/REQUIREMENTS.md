@@ -1,4 +1,4 @@
-# Requirements: AI Agent Studio
+# Requirements: AI CLI Studio
 
 **Defined:** 2026-06-11
 **Core Value:** AI CLI agents must have a visual canvas that just works — open artifacts, preview them, toggle code, browse files — controllable programmatically via API and MCP, cross-platform, and extensible for future tool apps.
@@ -30,7 +30,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **UI-01**: Preview-First default view — artifact renders immediately, code toggle reveals source
 - [ ] **UI-02**: Side-by-side split pane — preview and code visible simultaneously with resize handle
 - [ ] **UI-03**: Multi-tab artifacts — tab bar with close, switch, and state preservation
-- [ ] **UI-04**: File browser showing current project root with optional workspace scope
+- [x] **UI-04**: File browser showing current project root with optional workspace scope
 
 ### Agent Communication
 
@@ -97,7 +97,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UI-01 | Phase 2 | Pending |
 | UI-02 | Phase 2 | Pending |
 | UI-03 | Phase 2 | Pending |
-| UI-04 | Phase 2 | Pending |
+| UI-04 | Phase 2 | Complete |
 | COM-01 | Phase 3 | Pending |
 | COM-02 | Phase 3 | Pending |
 | COM-03 | Phase 3 | Pending |
@@ -111,6 +111,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ST-02 | Phase 3 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 27 total
 - Mapped to phases: 27
 - Unmapped: 0 ✓
