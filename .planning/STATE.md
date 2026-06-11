@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
+status: "Phase 01 shipped — PR #1"
 stopped_at: Phase 1 complete — app scaffolded, IPC wired, dark theme, WelcomeScreen
-last_updated: "2026-06-11T01:33:14.550Z"
-last_activity: 2026-06-11 — Phase 1 complete — app scaffolded, IPC wired, dark theme, WelcomeScreen
+last_updated: "2026-06-11T01:58:55.877Z"
+last_activity: 2026-06-11
 progress:
   total_phases: 4
   completed_phases: 1
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-06-11)
 
 Phase: 01 — COMPLETE
 Plan: 2 of 2
-Status: Phase 01 complete
-Last activity: 2026-06-11 -- Phase 01 marked complete
+Status: Phase 01 shipped — PR #1
+Last activity: 2026-06-11
 
 Progress: [██████████] 25%
 
