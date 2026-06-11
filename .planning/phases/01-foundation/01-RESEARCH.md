@@ -911,19 +911,19 @@ export function MarkdownSkeleton() {
 
 **If this table is empty:** All claims in this research were verified or cited — no user confirmation needed.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Which exact scaffold command works on this machine?**
+1. **Which exact scaffold command works on this machine?** `[RESOLVED]`
    - What we know: CONTEXT.md D-01 specifies `npm create @quick-start/electron@latest` but the npm package is `@quick-start/create-electron`.
+   - Resolution: Plan 01-01 Task 1 implements scaffold with the corrected command `npm create @quick-start/create-electron@latest --template react-ts` and includes a verification step to confirm the output structure.
    - What's unclear: Whether `npm create @quick-start/create-electron@latest` or `npx @quick-start/create-electron` works, and whether the `--template react-ts` flag is correct.
-   - Recommendation: **Plan for scaffold to be a single-step verification task.** The planner should designate a `checkpoint:verify-scaffold` as the very first task that runs the scaffold command, confirms the output, and adjusts subsequent tasks if the structure differs.
+   - Resolution: Plan handles both via fallback logic. The first task verifies the scaffold command and adjusts.
 
-2. **Does electron-vite's default BrowserWindow config include all three security flags?**
+2. **Does electron-vite's default BrowserWindow config include all three security flags?** `[RESOLVED]`
    - What we know: The official template should set `contextIsolation: true` (Electron defaults to true since v12). But `sandbox: true` is NOT the default — it must be explicitly set.
-   - What's unclear: Whether the scaffold template sets `sandbox: true`.
-   - Recommendation: **Plan for a task that audits and hardens `src/main/index.ts`** to explicitly set all three security flags regardless of scaffold defaults.
+   - Resolution: Plan 01-02 Task 1 explicitly audits and hardens `src/main/index.ts` to set all three security flags (`sandbox: true`, `contextIsolation: true`, `nodeIntegration: false`) regardless of scaffold defaults.
 
-3. **Which Node.js version does the environment provide?**
+3. **Which Node.js version does the environment provide?** `[RESOLVED]`
    - What we know: The environment has Node.js v24.15.0 as confirmed by `node --version`.
    - This is already answered — Electron 42 ships Node 24, so this is compatible.
 
