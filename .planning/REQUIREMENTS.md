@@ -87,33 +87,33 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FND-03 | Phase 1 | Pending |
 | FND-04 | Phase 1 | Pending |
 | FND-05 | Phase 1 | Pending |
-| RND-01 | TBD | Pending |
-| RND-02 | TBD | Pending |
-| RND-03 | TBD | Pending |
-| RND-04 | TBD | Pending |
-| RND-05 | TBD | Pending |
-| RND-06 | TBD | Pending |
-| RND-07 | TBD | Pending |
-| UI-01 | TBD | Pending |
-| UI-02 | TBD | Pending |
-| UI-03 | TBD | Pending |
-| UI-04 | TBD | Pending |
-| COM-01 | TBD | Pending |
-| COM-02 | TBD | Pending |
-| COM-03 | TBD | Pending |
-| COM-04 | TBD | Pending |
-| COM-05 | TBD | Pending |
-| COM-06 | TBD | Pending |
-| COM-07 | TBD | Pending |
-| COM-08 | TBD | Pending |
-| COM-09 | TBD | Pending |
-| ST-01 | TBD | Pending |
-| ST-02 | TBD | Pending |
+| RND-01 | Phase 2 | Pending |
+| RND-02 | Phase 2 | Pending |
+| RND-03 | Phase 4 | Pending |
+| RND-04 | Phase 2 | Pending |
+| RND-05 | Phase 4 | Pending |
+| RND-06 | Phase 4 | Pending |
+| RND-07 | Phase 4 | Pending |
+| UI-01 | Phase 2 | Pending |
+| UI-02 | Phase 2 | Pending |
+| UI-03 | Phase 2 | Pending |
+| UI-04 | Phase 2 | Pending |
+| COM-01 | Phase 3 | Pending |
+| COM-02 | Phase 3 | Pending |
+| COM-03 | Phase 3 | Pending |
+| COM-04 | Phase 3 | Pending |
+| COM-05 | Phase 3 | Pending |
+| COM-06 | Phase 3 | Pending |
+| COM-07 | Phase 3 | Pending |
+| COM-08 | Phase 3 | Pending |
+| COM-09 | Phase 3 | Pending |
+| ST-01 | Phase 2 | Pending |
+| ST-02 | Phase 3 | Pending |
 
 **Coverage:**
 - v1 requirements: 27 total
-- Mapped to phases: 0
-- Unmapped: 27 ⚠️
+- Mapped to phases: 27
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-06-11*
