@@ -10,7 +10,7 @@ export interface FileTreeEntry {
 
 // File types that can be viewed in Phase 2
 const VIEWABLE_EXTENSIONS = new Set([
-  '.js', '.ts', '.jsx', '.tsx', '.css', '.html', '.svg',
+  '.js', '.ts', '.jsx', '.tsx', '.css',
   '.json', '.md', '.py', '.rb', '.go', '.rs', '.sh', '.bash',
   '.yml', '.yaml', '.toml', '.xml', '.sql',
   '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp',

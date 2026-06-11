@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { flushSync } from 'react-dom'
 import { useElectronAPI } from './useElectronAPI'
 import { useArtifactTabsStore } from '../stores/artifactTabs'
 
@@ -19,14 +20,19 @@ export function useArtifactLoader() {
       const type = inferArtifactType(fileName)
       const tabId = filePath
 
-      openTab({
-        id: tabId,
-        title: fileName,
-        filePath,
-        type,
-        content: null,
-        isLoading: true,
+      flushSync(() => {
+        openTab({
+          id: tabId,
+          title: fileName,
+          filePath,
+          type,
+          content: null,
+          isLoading: true,
+        })
       })
+
+      // Wait one paint frame so the skeleton is visible
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
 
       try {
         const content = await electronAPI.fs.readFile(filePath)

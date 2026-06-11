@@ -9,7 +9,7 @@ export interface ArtifactTab {
   isLoading: boolean
 }
 
-const MAX_TABS = 5
+const MAX_TABS = 20
 
 interface ArtifactTabsState {
   tabs: ArtifactTab[]
@@ -33,11 +33,12 @@ export const useArtifactTabsStore = create<ArtifactTabsState>((set, get) => ({
       if (existing) {
         return { activeTabId: tab.id }
       }
-      if (state.tabs.length >= MAX_TABS) {
-        return state
+      const tabs = [...state.tabs, tab]
+      if (tabs.length > MAX_TABS) {
+        tabs.shift()
       }
       return {
-        tabs: [...state.tabs, tab],
+        tabs,
         activeTabId: tab.id,
       }
     }),

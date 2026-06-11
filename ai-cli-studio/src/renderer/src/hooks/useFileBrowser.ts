@@ -10,7 +10,7 @@ export function useFileBrowser() {
   const setLoading = useFileBrowserStore((s) => s.setLoading)
   const loadChildren = useFileBrowserStore((s) => s.loadChildren)
   const toggleExpand = useFileBrowserStore((s) => s.toggleExpand)
-  const isExpanded = useFileBrowserStore((s) => s.isExpanded)
+  const expandedPaths = useFileBrowserStore((s) => s.expandedPaths)
 
   const initRoot = useCallback(async () => {
     if (rootPath) return
@@ -37,8 +37,9 @@ export function useFileBrowser() {
 
   const expandDirectory = useCallback(
     async (dirPath: string) => {
+      const wasExpanded = expandedPaths.has(dirPath)
       toggleExpand(dirPath)
-      if (!isExpanded(dirPath)) {
+      if (!wasExpanded) {
         try {
           const entries = await electronAPI.fs.listDir(dirPath)
           loadChildren(dirPath, entries)
@@ -47,7 +48,7 @@ export function useFileBrowser() {
         }
       }
     },
-    [electronAPI, toggleExpand, isExpanded, loadChildren]
+    [electronAPI, toggleExpand, expandedPaths, loadChildren]
   )
 
   useEffect(() => {
