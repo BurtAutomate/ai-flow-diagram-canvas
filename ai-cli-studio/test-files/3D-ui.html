@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next-Gen Agent Interface 2027</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root {
+            --cyan: #00f3ff;
+            --red: #ff0055;
+            --purple: #b537f2;
+            --dark: #030305;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--dark);
+            font-family: 'Rajdhani', sans-serif;
+            color: #fff;
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none; /* Let clicks pass through to 3D canvas */
+        }
+
+        /* Glitch & Sci-Fi Effects */
+        .hud-panel {
+            background: rgba(3, 3, 5, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.05), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            position: relative;
+            pointer-events: auto;
+        }
+
+        .hud-panel::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px;
+            width: 10px; height: 10px;
+            border-top: 2px solid var(--cyan);
+            border-left: 2px solid var(--cyan);
+        }
+        
+        .hud-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; right: -1px;
+            width: 10px; height: 10px;
+            border-bottom: 2px solid var(--cyan);
+            border-right: 2px solid var(--cyan);
+        }
+
+        .hud-panel.enforcer {
+            border-color: rgba(255, 0, 85, 0.2);
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.05), inset 0 0 20px rgba(255, 0, 85, 0.05);
+        }
+        .hud-panel.enforcer::before, .hud-panel.enforcer::after { border-color: var(--red); }
+
+        .btn-sci-fi {
+            background: transparent;
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .btn-sci-fi:hover {
+            background: var(--cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--cyan);
+        }
+
+        .data-value {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* Target Reticle */
+        #crosshair {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px; height: 40px;
+            pointer-events: none;
+            z-index: 50;
+            transition: all 0.2s;
+        }
+        #crosshair::before, #crosshair::after {
+            content: '';
+            position: absolute;
+            background: rgba(0, 243, 255, 0.5);
+        }
+        #crosshair::before { top: 19px; left: 0; width: 40px; height: 2px; }
+        #crosshair::after { top: 0; left: 19px; width: 2px; height: 40px; }
+        .crosshair-active { scale: 1.5; }
+        .crosshair-active::before, .crosshair-active::after { background: #fff !important; box-shadow: 0 0 10px #fff, 0 0 20px var(--cyan); }
+
+        /* Loader */
+        #loader {
+            position: absolute; top:0; left:0; width: 100%; height: 100%;
+            background: var(--dark);
+            z-index: 1000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1s ease-out;
+        }
+    </style>
+    
+    <!-- Use Import Map for Three.js (ES Modules) -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <h1 class="text-5xl text-cyan-400 font-bold tracking-[0.5em] animate-pulse">INITIALIZING</h1>
+        <p class="text-cyan-600 mt-4 tracking-widest font-mono text-sm">LOADING NEURAL ENVIRONMENT...</p>
+    </div>
+
+    <!-- 3D WebGL Canvas -->
+    <div id="canvas-container"></div>
+    
+    <!-- CRT Scanline Overlay -->
+    <div class="scanline"></div>
+    <div id="crosshair"></div>
+
+    <!-- 2027 HUD UI Overlay -->
+    <div id="ui-layer" class="p-8 flex flex-col justify-between">
+        
+        <!-- Top Bar -->
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-5xl font-bold tracking-widest" style="text-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan);">A.G.E.N.T <span class="text-cyan-500 font-light">OS</span></h1>
+                <p class="text-cyan-400/70 tracking-[0.3em] text-sm mt-1 uppercase">God-Mode Visualization Subsystem // v4.2.0</p>
+            </div>
+            
+            <div class="flex gap-4">
+                <div class="hud-panel p-4 min-w-[150px]">
+                    <p class="text-xs text-cyan-500/80 tracking-widest uppercase mb-1">System Load</p>
+                    <p class="text-2xl font-bold data-value text-cyan-400" id="sys-load">24.5%</p>
+                </div>
+                <div class="hud-panel p-4 min-w-[150px]">
+                    <p class="text-xs text-cyan-500/80 tracking-widest uppercase mb-1">Active Agents</p>
+                    <p class="text-2xl font-bold data-value text-cyan-400">4</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Node Inspector (Hidden by default, shown on hover/click) -->
+        <div id="node-inspector" class="absolute top-1/2 right-8 -translate-y-1/2 w-80 hud-panel p-6 opacity-0 transition-opacity duration-300 pointer-events-none">
+            <div class="flex items-center gap-3 mb-4 border-b border-cyan-500/30 pb-4">
+                <div id="ni-icon" class="w-10 h-10 border border-cyan-400 flex items-center justify-center text-xl shadow-[0_0_10px_rgba(0,243,255,0.5)]">⚙️</div>
+                <div>
+                    <h3 id="ni-title" class="text-2xl font-bold tracking-wider text-white">COMPUTE NODE</h3>
+                    <p id="ni-subtitle" class="text-xs text-cyan-500 tracking-widest data-value">CLAUDE_3.5_SONNET</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Current Task</p>
+                    <p id="ni-task" class="text-sm text-white data-value">Generating AST structure for target codebase...</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">Context Window</p>
+                    <div class="w-full bg-black/50 h-2 rounded-full overflow-hidden border border-cyan-900">
+                        <div id="ni-bar" class="h-full bg-cyan-400 w-[65%] shadow-[0_0_10px_rgba(0,243,255,1)]"></div>
+                    </div>
+                    <p id="ni-metric" class="text-right text-xs text-cyan-400 mt-1 data-value">134k / 200k tokens</p>
+                </div>
+            </div>
+            <button id="ni-btn" class="w-full mt-6 py-2 btn-sci-fi font-bold text-sm pointer-events-auto">INTERVENE / EDIT PROMPT</button>
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="flex justify-between items-end">
+            <div class="hud-panel p-6 max-w-xl">
+                <div class="flex items-center gap-4 mb-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(255,0,85,0.8)]"></span>
+                    <h2 class="text-xl font-bold tracking-widest text-red-400">ENFORCER ALERT</h2>
+                </div>
+                <p class="text-gray-300 text-sm leading-relaxed mb-4">
+                    Strict architecture violation detected. Compute node attempted to bypass domain-driven folder structure. Code packet intercepted and routed for correction.
+                </p>
+                <div class="flex gap-4">
+                    <button class="px-6 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-black font-bold tracking-wider transition-all shadow-[0_0_15px_rgba(255,0,85,0.3)] pointer-events-auto">
+                        VIEW LOGS
+                    </button>
+                    <button class="px-6 py-2 btn-sci-fi font-bold tracking-wider">
+                        BYPASS ENFORCER
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mini Map / Legend -->
+            <div class="text-right pointer-events-auto">
+                <p class="text-xs text-cyan-500/80 tracking-widest uppercase mb-2">Navigation Schema</p>
+                <ul class="text-sm data-value space-y-2 text-gray-400">
+                    <li class="flex items-center justify-end gap-2"><span class="text-purple-400 shadow-[0_0_5px_currentColor]">■</span> Planner (Hierarchy)</li>
+                    <li class="flex items-center justify-end gap-2"><span class="text-cyan-400 shadow-[0_0_5px_currentColor]">■</span> Compute (LLM)</li>
+                    <li class="flex items-center justify-end gap-2"><span class="text-red-500 shadow-[0_0_5px_currentColor]">■</span> Enforcer (Ruleset)</li>
+                    <li class="flex items-center justify-end gap-2"><span class="text-green-400 shadow-[0_0_5px_currentColor]">■</span> Storage (Git / FS)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- The 3D Engine Script -->
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+        // 1. SCENE SETUP
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x030305, 0.02); // Deep space fog
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 30, 40); // Isometric-ish angled view
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.toneMapping = THREE.ReinhardToneMapping;
+        container.appendChild(renderer.domElement);
+
+        // 2. POST-PROCESSING (The "2027 Game of the Year" Bloom)
+        const renderScene = new RenderPass(scene, camera);
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+        bloomPass.threshold = 0;
+        bloomPass.strength = 1.8; // Intense neon glow
+        bloomPass.radius = 0.5;
+
+        const composer = new EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
+
+        // 3. CONTROLS
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2 - 0.05; // Don't go below ground
+        controls.minDistance = 10;
+        controls.maxDistance = 100;
+        // Auto rotate slowly for that cinematic feel
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+
+        // 4. ENVIRONMENT (Cyber Grid Floor)
+        const gridHelper = new THREE.GridHelper(200, 100, 0x00f3ff, 0x002233);
+        gridHelper.position.y = -2;
+        scene.add(gridHelper);
+
+        // Floating ambient particles (Space dust)
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i=0; i<particlesCount*3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 100;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({ size: 0.1, color: 0x00f3ff, transparent: true, opacity: 0.5 });
+        const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particleMesh);
+
+        // 5. THE AI AGENT NODES
+        const nodes = [];
+        const interactableObjects = [];
+
+        function createNode(name, color, type, position, scale, data) {
+            const group = new THREE.Group();
+            group.position.copy(position);
+
+            // Outer wireframe
+            let geometry;
+            if (type === 'compute') geometry = new THREE.IcosahedronGeometry(scale, 1);
+            else if (type === 'enforcer') geometry = new THREE.OctahedronGeometry(scale, 0);
+            else if (type === 'planner') geometry = new THREE.BoxGeometry(scale, scale, scale);
+            else geometry = new THREE.CylinderGeometry(scale*0.7, scale*0.7, scale, 16);
+
+            const wireframeMaterial = new THREE.MeshBasicMaterial({ 
+                color: color, 
+                wireframe: true, 
+                transparent: true, 
+                opacity: 0.3 
+            });
+            const outerMesh = new THREE.Mesh(geometry, wireframeMaterial);
+            group.add(outerMesh);
+
+            // Inner solid glowing core
+            const coreGeometry = type === 'compute' ? new THREE.IcosahedronGeometry(scale*0.6, 0) : geometry.clone();
+            const coreScale = type === 'compute' ? 1 : 0.6;
+            coreGeometry.scale(coreScale, coreScale, coreScale);
+            
+            const coreMaterial = new THREE.MeshBasicMaterial({ color: color });
+            const innerMesh = new THREE.Mesh(coreGeometry, coreMaterial);
+            group.add(innerMesh);
+
+            // Add point light to illuminate surroundings
+            const light = new THREE.PointLight(color, 2, 20);
+            group.add(light);
+
+            // Floating animation properties
+            group.userData = { 
+                name, color, type, data,
+                initialY: position.y,
+                rotationSpeed: type === 'compute' ? 0.01 : 0.005,
+                outerMesh, innerMesh
+            };
+
+            scene.add(group);
+            nodes.push(group);
+            interactableObjects.push(innerMesh); // For raycasting
+            innerMesh.userData.parentGroup = group; // Link mesh to group data
+
+            return group;
+        }
+
+        const plannerNode = createNode('PLANNER', 0xb537f2, 'planner', new THREE.Vector3(-15, 2, -10), 3, {
+            title: "PLANNING SUB-AGENT", subtitle: "HIERARCHY & ARCHITECTURE", icon: "🧠", task: "Breaking down user prompt into sub-tasks...", barW: "30%", metric: "Task 2 of 8"
+        });
+
+        const computeNode = createNode('COMPUTE', 0x00f3ff, 'compute', new THREE.Vector3(0, 5, 0), 4, {
+            title: "COMPUTE NODE", subtitle: "CLAUDE_3.5_SONNET", icon: "⚙️", task: "Generating AST structure for target codebase...", barW: "65%", metric: "134k / 200k tokens"
+        });
+
+        const enforcerNode = createNode('ENFORCER', 0xff0055, 'enforcer', new THREE.Vector3(15, 2, 5), 2.5, {
+            title: "ENFORCER NODE", subtitle: "RULES API & TOLLGATE", icon: "🛡️", task: "Validating Git conventions and AST structure...", barW: "100%", metric: "Linting: FAILED"
+        });
+
+        const storageNode = createNode('STORAGE', 0x00ff88, 'storage', new THREE.Vector3(5, 0, 15), 2, {
+            title: "STORAGE & GIT", subtitle: "LOCAL FILE SYSTEM", icon: "💾", task: "Awaiting validated code injection...", barW: "0%", metric: "Ready"
+        });
+
+        // 6. GLOWING CONNECTIONS (Data Splines)
+        function createConnection(nodeA, nodeB, color) {
+            // Create a curved path
+            const start = nodeA.position.clone();
+            const end = nodeB.position.clone();
+            const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+            mid.y += 5; // Arch upwards
+
+            const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
+            const tubeGeometry = new THREE.TubeGeometry(curve, 20, 0.1, 8, false);
+            const material = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.4 });
+            const tube = new THREE.Mesh(tubeGeometry, material);
+            scene.add(tube);
+            return curve;
+        }
+
+        const path1 = createConnection(plannerNode, computeNode, 0x00f3ff);
+        const path2 = createConnection(computeNode, enforcerNode, 0xff0055);
+        const path3 = createConnection(enforcerNode, storageNode, 0x00ff88);
+
+        // Data Packets (Moving glowing spheres along curves)
+        const packets = [];
+        function createPacket(curve, color, speed) {
+            const geometry = new THREE.SphereGeometry(0.4, 8, 8);
+            const material = new THREE.MeshBasicMaterial({ color: color });
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+            packets.push({ mesh, curve, t: 0, speed });
+        }
+
+        createPacket(path1, 0xb537f2, 0.002);
+        createPacket(path2, 0x00f3ff, 0.003); // From compute
+        // Rejected packet bouncing back!
+        createPacket(path2, 0xff0055, -0.004); 
+
+        // 7. RAYCASTING & INTERACTIVITY (Hover over nodes)
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        
+        const uiInspector = document.getElementById('node-inspector');
+        const uiTitle = document.getElementById('ni-title');
+        const uiSubtitle = document.getElementById('ni-subtitle');
+        const uiIcon = document.getElementById('ni-icon');
+        const uiTask = document.getElementById('ni-task');
+        const uiBar = document.getElementById('ni-bar');
+        const uiMetric = document.getElementById('ni-metric');
+        const uiBtn = document.getElementById('ni-btn');
+        const crosshair = document.getElementById('crosshair');
+
+        let hoveredNode = null;
+
+        window.addEventListener('mousemove', (event) => {
+            // Normalize mouse coords
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Stop auto-rotate if user takes control
+            if (event.buttons > 0) controls.autoRotate = false;
+        });
+
+        // 8. ANIMATION LOOP
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            controls.update(); // Required for damping and auto-rotate
+
+            // Rotate and bob nodes
+            nodes.forEach(node => {
+                node.rotation.y += node.userData.rotationSpeed;
+                node.userData.outerMesh.rotation.x -= node.userData.rotationSpeed * 0.5;
+                node.position.y = node.userData.initialY + Math.sin(time * 2 + node.position.x) * 0.5;
+            });
+
+            // Animate data packets
+            packets.forEach(p => {
+                p.t += p.speed;
+                if (p.t > 1) p.t = 0;
+                if (p.t < 0) p.t = 1;
+                const pos = p.curve.getPointAt(p.t);
+                p.mesh.position.copy(pos);
+            });
+
+            // Rotate starfield slowly
+            particleMesh.rotation.y = time * 0.02;
+
+            // Update Sys Load UI mock
+            document.getElementById('sys-load').innerText = (20 + Math.sin(time*5)*5).toFixed(1) + '%';
+
+            // Raycasting logic for HUD updates
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(interactableObjects);
+
+            if (intersects.length > 0) {
+                const target = intersects[0].object;
+                const parentData = target.userData.parentGroup.userData;
+                
+                if (hoveredNode !== parentData.name) {
+                    hoveredNode = parentData.name;
+                    document.body.style.cursor = 'crosshair';
+                    crosshair.classList.add('crosshair-active');
+                    
+                    // Update HUD panel
+                    uiTitle.innerText = parentData.data.title;
+                    uiTitle.style.color = '#' + parentData.color.toString(16);
+                    uiSubtitle.innerText = parentData.data.subtitle;
+                    uiIcon.innerText = parentData.data.icon;
+                    uiTask.innerText = parentData.data.task;
+                    uiBar.style.width = parentData.data.barW;
+                    uiBar.style.backgroundColor = '#' + parentData.color.toString(16);
+                    uiBar.style.boxShadow = `0 0 10px #${parentData.color.toString(16)}`;
+                    uiMetric.innerText = parentData.data.metric;
+                    uiMetric.style.color = '#' + parentData.color.toString(16);
+                    
+                    // Change theme of panel based on node
+                    if(parentData.type === 'enforcer') {
+                        uiInspector.classList.add('enforcer');
+                        uiBtn.style.color = 'var(--red)';
+                        uiBtn.style.borderColor = 'var(--red)';
+                        uiBtn.innerText = "OVERRIDE RULES";
+                    } else {
+                        uiInspector.classList.remove('enforcer');
+                        uiBtn.style.color = 'var(--cyan)';
+                        uiBtn.style.borderColor = 'var(--cyan)';
+                        uiBtn.innerText = "INTERVENE / EDIT PROMPT";
+                    }
+
+                    // Show HUD
+                    uiInspector.style.opacity = '1';
+                    uiInspector.style.pointerEvents = 'auto';
+                    
+                    // Scale up the 3D node
+                    target.userData.parentGroup.scale.set(1.2, 1.2, 1.2);
+                }
+            } else {
+                if (hoveredNode !== null) {
+                    // Reset scaling
+                    nodes.forEach(n => n.scale.set(1, 1, 1));
+                    hoveredNode = null;
+                    document.body.style.cursor = 'default';
+                    crosshair.classList.remove('crosshair-active');
+                    uiInspector.style.opacity = '0';
+                    uiInspector.style.pointerEvents = 'none';
+                }
+            }
+
+            // Render scene via composer for the bloom effect
+            composer.render();
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Hide loader after a tiny delay
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 1000);
+        }, 1500);
+
+        // Start engine
+        animate();
+
+    </script>
+</body>
+</html>

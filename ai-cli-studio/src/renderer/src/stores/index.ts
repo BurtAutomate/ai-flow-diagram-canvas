@@ -1,0 +1,6 @@
+export { useArtifactTabsStore } from './artifactTabs'
+export type { ArtifactTab } from './artifactTabs'
+export { useUiStateStore } from './uiState'
+export type { ViewMode } from './uiState'
+export { useFileBrowserStore } from './fileBrowser'
+export type { FileTreeEntry } from './fileBrowser'

@@ -356,5 +356,5 @@ Phase 1 (Scaffold + Core Shell) — file system abstraction layer must be platfo
 
 ---
 
-*Pitfalls research for: AI Agent Studio (Electron Canvas / Artifact Viewer with MCP + WebSocket)*
+*Pitfalls research for: AI CLI Studio (Electron Canvas / Artifact Viewer with MCP + WebSocket)*
 *Researched: 2026-06-11*

@@ -46,8 +46,8 @@
 
 ```bash
 # Scaffold the project
-npm create @quick-start/electron@latest ai-agent-studio -- --template react-ts
-cd ai-agent-studio
+npm create @quick-start/electron@latest ai-cli-studio -- --template react-ts
+cd ai-cli-studio
 
 # Core Electron + UI
 npm install react@19 react-dom@19
@@ -159,5 +159,5 @@ npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
 - [Model Context Protocol docs](https://modelcontextprotocol.io) — MCP specification and SDK docs
 
 ---
-*Stack research for: AI Agent Studio — Electron-based Canvas / Artifact Viewer*
+*Stack research for: AI CLI Studio — Electron-based Canvas / Artifact Viewer*
 *Researched: 2026-06-11*

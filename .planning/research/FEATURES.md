@@ -1,7 +1,7 @@
 # Feature Research
 
 **Domain:** Electron-based Canvas / Artifact Viewer for AI CLI Agents
-**Product:** AI Agent Studio
+**Product:** AI CLI Studio
 **Researched:** 2026-06-11
 **Confidence:** HIGH — based on deep analysis of ChatGPT Canvas, Claude Artifacts, Gemini Canvas, and Codex App
 
@@ -27,11 +27,11 @@ Features users assume exist. Missing these = product feels incomplete. These are
 
 ### Differentiators (Competitive Advantage)
 
-Features that set the product apart. These are areas where AI Agent Studio can beat ChatGPT Canvas, Claude Artifacts, and Codex App for its specific niche — CLI coding agents.
+Features that set the product apart. These are areas where AI CLI Studio can beat ChatGPT Canvas, Claude Artifacts, and Codex App for its specific niche — CLI coding agents.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| **MCP Server (disable-able)** | Agents control the canvas via MCP tools (open_artifact, update_artifact, toggle_view, list_files, etc.). This is the ONLY native canvas available as an MCP tool — competitors don't offer this. Claude Artifacts only recently got MCP integration for external tools (Oct 2025), but no agent can programmatically control the canvas itself. | HIGH | MCP server exposes tools using JSON-RPC 2.0 stdio or HTTP. Must be disableable for agents that don't need it. The MCP surface IS the product's competitive moat — it makes AI Agent Studio controllable from any MCP-compatible agent (Claude Code, Codex, Cursor, Cline, etc.). |
+| **MCP Server (disable-able)** | Agents control the canvas via MCP tools (open_artifact, update_artifact, toggle_view, list_files, etc.). This is the ONLY native canvas available as an MCP tool — competitors don't offer this. Claude Artifacts only recently got MCP integration for external tools (Oct 2025), but no agent can programmatically control the canvas itself. | HIGH | MCP server exposes tools using JSON-RPC 2.0 stdio or HTTP. Must be disableable for agents that don't need it. The MCP surface IS the product's competitive moat — it makes AI CLI Studio controllable from any MCP-compatible agent (Claude Code, Codex, Cursor, Cline, etc.). |
 | **Dual-mode operation (Self-contained vs Agent-connected)** | Self-contained: Studio runs its own local server, agent connects to it. Agent-connected: agent runs the server, Studio connects. No competitor offers both modes. Users can use Studio standalone or integrate into existing agent workflows. | HIGH | Two different startup flows. Self-contained: Studio starts HTTP/WS server, agent connects via MCP or WS. Agent-connected: agent starts server, Studio connects as a client. Both modes must share the same rendering backend. |
 | **File browser with workspace scope** | Shows current project root with optional workspace/directory filtering. Agents write files to disk; users need to browse and preview them. Claude web Artifacts has no file browser at all. Codex App has basic file browser but no MCP-controlled file selection. | MEDIUM | Directory tree view, file type icons, integrated preview (click a file to preview it in the same viewer). Must handle large projects (millions of files) — lazy-load directory contents. |
 | **Side-by-side Preview + Code** | Not just toggle but simultaneous view. Resizable panels. Users developing with agents need to see both. Claude Artifacts only toggles; ChatGPT Canvas shows side-by-side for documents. | MEDIUM | Split pane with drag handle. Sync scroll between code and preview for HTML. Remember user's preferred split ratio. |
@@ -248,5 +248,5 @@ Features to defer until product-market fit is established.
 - PROJECT.md — ARTF-01 through ARTF-14 requirements, constraints, scope boundaries
 
 ---
-*Feature research for: AI Agent Studio (Electron Canvas / Artifact Viewer for AI CLI Agents)*
+*Feature research for: AI CLI Studio (Electron Canvas / Artifact Viewer for AI CLI Agents)*
 *Researched: 2026-06-11*
